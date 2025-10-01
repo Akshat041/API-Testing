@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API testing</title>
+  </head>
+  <body style="display: flex; flex-direction: column">
+    <input type="text" placeholder="Search any GIF!" />
+    <img src="#" height="500px" />
+    <button style="font-size: 1.5rem">Change GIF</button>
+    <script>
+      const img = document.querySelector("img");
+      const changeGifBtn = document.querySelector("button");
+      const gifInp = document.querySelector("input");
+
+      function getGIF(gifSearch) {
+        console.log("fetching a gif.......");
+        fetch(
+          `https://api.giphy.com/v1/gifs/translate?api_key=IzSC2451KqyOMNMXQLiXNuThHc18BAQh&s=${gifSearch}`
+        )
+          .then(function (response) {
+            if (response.ok) {
+              return response.json();
+            }
+          })
+          .then(function (response) {
+            console.log(response.data.images.original.url);
+
+            img.src = `${response.data.images.original.url}`;
+          })
+          .catch(function (response) {
+            console.log("Invalid Input! Please search any GIF.");
+          });
+      }
+
+      changeGifBtn.addEventListener("click", () => {
+        img.src = "";
+        let gifSearch = gifInp.value;
+        console.log(gifSearch);
+
+        getGIF(gifSearch);
+      });
+
+      getGIF();
+    </script>
+  </body>
+</html>
